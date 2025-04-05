@@ -6,6 +6,7 @@ public class ProyectProg1 {
 
     public static ArrayList<Usuario> usuarios = new ArrayList<>();
     public static ArrayList<Libros> libros = new ArrayList<>();
+    public static ArrayList<Cupones> cupones = new ArrayList<>();
     
     public static void main(String[] args) {
         

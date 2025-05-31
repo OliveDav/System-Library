@@ -4,7 +4,14 @@
  */
 package com.mycompany.proyectprog1;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -24,7 +31,6 @@ public class ConsultarCupones extends javax.swing.JFrame {
         pintarTabla();
         choice1.addItem("Monto");
         choice1.addItem("Porcentaje");
-        
     }
 
     private void pintarTabla(){
@@ -40,6 +46,29 @@ public class ConsultarCupones extends javax.swing.JFrame {
             tabla.setValueAt(u.tipoDesc, i, 2);
             tabla.setValueAt(u.fechVen, i, 3);
         }
+    }
+    
+    public static void leer(String ruta){
+        try {
+            File archivo = new File(ruta);
+            FileReader leer = new FileReader(archivo);
+            BufferedReader bloque = new BufferedReader(leer);
+            String linea = bloque.readLine();
+            while(linea != null){
+                String[] cup = linea.split("\\|");
+                Cupones c = new Cupones();
+                c.codigo = cup[0].trim();
+                c.descuento = Double.parseDouble(cup[1].trim());
+                c.tipoDesc = cup[2].trim();
+                c.fechVen = cup[3].trim();
+                ProyectProg1.cupones.add(c);
+                linea = bloque.readLine();
+            }
+            leer.close(); 
+        } catch (IOException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,6 +93,7 @@ public class ConsultarCupones extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -116,11 +146,18 @@ public class ConsultarCupones extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Carga de archivo");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -139,16 +176,17 @@ public class ConsultarCupones extends javax.swing.JFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -164,8 +202,10 @@ public class ConsultarCupones extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 37, Short.MAX_VALUE))
+                        .addGap(0, 56, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -235,6 +275,21 @@ public class ConsultarCupones extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JFileChooser FileChooser = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Tablas de cálculo", "csv", "xlsx");
+        
+        FileChooser.setFileFilter(filtro);
+        int seleccionar = FileChooser.showOpenDialog(this);
+        
+        if(seleccionar == JFileChooser.APPROVE_OPTION){
+            File ruta = FileChooser.getSelectedFile();
+            leer(ruta.getAbsolutePath());
+            pintarTabla();
+        }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Choice choice1;
@@ -242,6 +297,7 @@ public class ConsultarCupones extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -24,8 +24,34 @@ public class Login extends javax.swing.JFrame {
         u.rol = "A";
         u.usuario = "admin";
         ProyectProg1.usuarios.add(u);
+        libreria();
     }
-
+    public void libreria(){
+        Libros l = new Libros();
+        l.autor = "Juan";
+        l.genero = "Accion";
+        l.precioVenta = 20;
+        l.precioSinIva = 20/1.12;
+        l.stock = 130;
+        l.titulo = "Aventuras locas";
+        Libros l1 = new Libros();
+        l1.autor = "Luisa";
+        l1.genero = "Romance";
+        l1.precioVenta = 16;
+        l1.precioSinIva = 16/1.12;
+        l1.stock = 302;
+        l1.titulo = "Libre vida";
+        Libros l2 = new Libros();
+        l2.autor = "Steve";
+        l2.genero = "Fabula";
+        l2.precioVenta = 40;
+        l2.precioSinIva = 40/1.12;
+        l2.stock = 249;
+        l2.titulo = "Pepito";
+        ProyectProg1.libros.add(l);
+        ProyectProg1.libros.add(l1);
+        ProyectProg1.libros.add(l2);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -167,7 +193,7 @@ public class Login extends javax.swing.JFrame {
                     v.setVisible(true);
                 }
                 else{
-                    VentanaVendedor v = new VentanaVendedor();
+                    VentanaVendedor v = new VentanaVendedor(u);
                     v.setVisible(true);
                 }
             }
